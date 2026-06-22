@@ -35,7 +35,7 @@ jobs:
       - name: Download resources
         uses: actions/download-artifact@v4
         with:
-          name: helium_macos_resources_${{ inputs.arch }}
+          name: ungoogled_chromium_macos_resources_${{ inputs.arch }}
       - name: Unpack resources
         run: ./github_unpack_resources.sh && ls -la
       - name: Prepare for building

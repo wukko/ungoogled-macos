@@ -2,7 +2,7 @@
 
 --- a/chrome/browser/extensions/BUILD.gn
 +++ b/chrome/browser/extensions/BUILD.gn
-@@ -849,9 +849,6 @@ source_set("extensions") {
+@@ -846,9 +846,6 @@ source_set("extensions") {
        # TODO(crbug.com/346472679): Remove this circular dependency.
        "//chrome/browser/web_applications/extensions",
  
@@ -12,7 +12,7 @@
        # TODO(crbug.com/343037853): Remove this circular dependency.
        "//chrome/browser/themes",
  
-@@ -884,7 +881,6 @@ source_set("extensions") {
+@@ -881,7 +878,6 @@ source_set("extensions") {
        "//chrome/common",
        "//chrome/common/extensions/api",
        "//components/omnibox/browser",
@@ -22,7 +22,7 @@
        "//content/public/browser",
 --- a/chrome/browser/ui/BUILD.gn
 +++ b/chrome/browser/ui/BUILD.gn
-@@ -637,18 +637,9 @@ static_library("ui") {
+@@ -629,18 +629,9 @@ static_library("ui") {
      "//components/reading_list/core",
      "//components/renderer_context_menu",
      "//components/resources",
@@ -41,7 +41,7 @@
      "//components/schema_org/common:improved_mojom",
      "//components/search_engines",
      "//components/security_interstitials/content:security_interstitial_page",
-@@ -5742,7 +5733,6 @@ group("ui_public_dependencies") {
+@@ -5704,7 +5695,6 @@ group("ui_public_dependencies") {
      "//components/dom_distiller/core",
      "//components/enterprise/buildflags",
      "//components/paint_preview/buildflags",
@@ -179,7 +179,7 @@
      ash::prefs::kAuthenticationFlowAutoReloadInterval,
 --- a/chrome/browser/chrome_content_browser_client.cc
 +++ b/chrome/browser/chrome_content_browser_client.cc
-@@ -8290,33 +8290,6 @@ bool ChromeContentBrowserClient::SetupEm
+@@ -8289,33 +8289,6 @@ bool ChromeContentBrowserClient::SetupEm
      CHECK(!soda_language_pack_path.empty());
      CHECK(serializer->SetParameter(sandbox::policy::kParamSodaLanguagePackPath,
                                     soda_language_pack_path.value()));

@@ -9,7 +9,6 @@ _src_dir="$_root_dir/build/src"
 _out_dir="$_src_dir/out/Default"
 _main_repo="$_root_dir/helium-chromium"
 _subs_cache="$_root_dir/build/subs.tar.gz"
-_namesubs_cache="$_root_dir/build/namesubs.tar"
 
 # SISO paths
 _depot_tools_dir="$_src_dir/third_party/depot_tools"

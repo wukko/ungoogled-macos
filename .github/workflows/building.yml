@@ -36,7 +36,7 @@ jobs:
       - name: Upload resources
         uses: actions/upload-artifact@v4
         with:
-          name: helium_macos_resources_${{ inputs.arch }}
+          name: ungoogled_chromium_macos_resources_${{ inputs.arch }}
           path: upload_build_resources/
 
   build_job_01:

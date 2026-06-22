@@ -10,14 +10,14 @@ _src_dir="$_root_dir/build/src"
 # If build finished successfully
 if [[ -f "$_root_dir/build_finished_$_target_cpu.log" ]] ; then
   # For packaging
-  _helium_version=$(python3 "$_main_repo/utils/helium_version.py" --tree "$_main_repo" --platform-tree "$_root_dir" --print)
+  _ungoogled_version=$("$_root_dir/devutils/print_tag_version.sh")
 
-  _file_name="helium_${_helium_version}_${_target_cpu}-macos.dmg"
+  _file_name="ungoogled_chromium_${_ungoogled_version}_${_target_cpu}-macos.dmg"
   _hash_name="${_file_name}.hashes.md"
 
   cd "$_src_dir"
 
-  xattr -cs out/Default/Helium.app
+  xattr -cs out/Default/Chromium.app
 
   # Prepar the certificate for app signing
   echo $MACOS_CERTIFICATE | base64 --decode > "$TMPDIR/certificate.p12"

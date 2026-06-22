@@ -79,7 +79,7 @@ def generate_delta_for(version, urls, args):
       print(f.name)
       with tempfile.TemporaryDirectory() as d1, tempfile.TemporaryDirectory() as d2:
         with mount(f.name, d1), mount(args[i], d2):
-          do_diff(d1 + '/Helium.app', d2 + '/Helium.app', f'{args[2]}/{version}-{arch}.delta')
+          do_diff(d1 + '/Chromium.app', d2 + '/Chromium.app', f'{args[2]}/{version}-{arch}.delta')
 
 
 if __name__ == '__main__':

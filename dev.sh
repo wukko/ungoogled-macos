@@ -72,12 +72,6 @@ ___helium_toolchain() {
     "$_root_dir/retrieve_and_unpack_resource.sh" -t
 }
 
-___helium_resources() {
-    python3 "$_main_repo/utils/generate_resources.py" "$_main_repo/resources/generate_resources.txt" "$_main_repo/resources"
-    python3 "$_main_repo/utils/replace_resources.py" "$_root_dir/resources/platform_resources.txt" "$_root_dir/resources" "$_src_dir"
-    python3 "$_main_repo/utils/replace_resources.py" "$_main_repo/resources/helium_resources.txt" "$_main_repo/resources" "$_src_dir"
-}
-
 ___helium_setup_presetup() {
     if [ -d "$_src_dir/out" ]; then
         echo "$_src_dir/out already exists" >&2
@@ -89,13 +83,7 @@ ___helium_setup_presetup() {
     ___helium_info_pull
     python3 "$_main_repo/utils/prune_binaries.py" "$_src_dir" "$_main_repo/pruning.list"
     ___helium_toolchain
-    ___helium_resources
     ___helium_setup_gn
-
-    python3 "$_main_repo/utils/helium_version.py" \
-        --tree "$_main_repo" \
-        --platform-tree "$_root_dir" \
-        --chromium-tree "$_src_dir"
 }
 
 ___helium_setup() {
@@ -112,53 +100,21 @@ ___helium_setup() {
 ___helium_reset() {
     "$_root_dir/devutils/update_patches.sh" unmerge || true
     rm "$_subs_cache" || true
-    rm "$_namesubs_cache" || true
     if mv "$_src_dir" "${_src_dir}x"; then
         rm -rf "${_src_dir}x" &
     fi
-}
-
-___helium_name_substitution() {
-    if [ "$1" = "nameunsub" ]; then
-        python3 "$_main_repo/utils/name_substitution.py" --unsub \
-            -t "$_src_dir" --backup-path "$_namesubs_cache"
-    elif [ "$1" = "namesub" ]; then
-        if [ -f "$_namesubs_cache" ]; then
-            echo "$_namesubs_cache exists, are you sure you want to do this?" >&2
-            echo "if yes, then delete the $_namesubs_cache file" >&2
-            return
-        fi
-
-        python3 "$_main_repo/utils/name_substitution.py" --sub \
-            -t "$_src_dir" --backup-path "$_namesubs_cache"
-    else
-        echo "unknown action: $1" >&2
-        return
-    fi
-}
-
-___helium_apply_translations() {
-    python3 "$_main_repo/utils/i18n_apply.py" -t "$_src_dir"
-}
-
-___helium_generate_translations() {
-    python3 "$_main_repo/devutils/i18n.py" generate
 }
 
 ___helium_substitution() {
     if [ "$1" = "unsub" ]; then
         python3 "$_main_repo/utils/domain_substitution.py" revert \
             -c "$_subs_cache" "$_src_dir"
-
-        ___helium_name_substitution nameunsub
     elif [ "$1" = "sub" ]; then
         if [ -f "$_subs_cache" ]; then
             echo "$_subs_cache exists, are you sure you want to do this?" >&2
             echo "if yes, then delete the $_subs_cache file" >&2
             return
         fi
-
-        ___helium_name_substitution namesub
 
         python3 "$_main_repo/utils/domain_substitution.py" apply \
             -r "$_main_repo/domain_regex.list" \
@@ -178,8 +134,8 @@ ___helium_build() {
 }
 
 ___helium_run() {
-    "$_out_dir/Helium.app/Contents/MacOS/Helium" \
-    --user-data-dir="$HOME/Library/Application Support/net.imput.helium.dev" \
+    "$_out_dir/Chromium.app/Contents/MacOS/Chromium" \
+    --user-data-dir="$HOME/Library/Application Support/org.chromium.Chromium.dev" \
     --enable-ui-devtools \
     --use-mock-keychain \
     --disable-features=DialMediaRouteProvider
@@ -297,12 +253,8 @@ __helium_menu() {
         setup) ___helium_setup;;
         presetup) ___helium_setup_presetup;;
         configure) ___helium_configure;;
-        resources) ___helium_resources;;
 
         sub|unsub) ___helium_substitution "$1";;
-        namesub|nameunsub) ___helium_name_substitution "$1";;
-        translate) ___helium_apply_translations;;
-        transgen) ___helium_generate_translations;;
 
         merge) ___helium_patches_merge;;
         unmerge) ___helium_patches_unmerge;;
@@ -324,15 +276,10 @@ __helium_menu() {
             echo "\t         equivalent of: [presetup, merge, push, configure]" >&2
             echo "\tpresetup - downloads sources, sets up GN, and prepares third-party dependencies" >&2
             echo "\tconfigure - generates build configuration and tools" >&2
-            echo "\tresources - generates and copies helium resources (such as icons)" >&2
 
             echo "\n" >&2
-            echo "\tsub - apply google domain and name substitutions" >&2
-            echo "\tunsub - undo google domain and name substitutions" >&2
-            echo "\tnamesub - apply only name substitutions" >&2
-            echo "\tnameunsub - undo only name substitutions" >&2
-            echo "\ttranslate - apply translations from i18n directory" >&2
-            echo "\ttransgen - generate source strings for translation" >&2
+            echo "\tsub - apply google domain substitutions" >&2
+            echo "\tunsub - undo google domain substitutions" >&2
 
             echo "\n" >&2
             echo "\tmerge - merges all patches" >&2
@@ -351,7 +298,7 @@ __helium_menu() {
 
             echo "\n" >&2
             echo "\tbuild - builds a development binary" >&2
-            echo "\trun - runs a development build of helium with dev data dir & ui devtools enabled" >&2
+            echo "\trun - runs a development build of Chromium with dev data dir & ui devtools enabled" >&2
             echo "\treset - nukes everything" >&2
     esac
 }
@@ -366,6 +313,6 @@ if ! (return 0 2>/dev/null); then
 else
     if [ "$__helium_loaded" = "" ]; then
         __helium_loaded=1
-        PS1="🎈 $PS1"
+        PS1="⚙️ $PS1"
     fi
 fi

@@ -3,16 +3,16 @@
 _root_dir="$(dirname "$(greadlink -f "$0")")"
 _main_repo="$_root_dir/helium-chromium"
 
-_helium_version=$(python3 "$_main_repo/utils/helium_version.py" --tree "$_main_repo" --platform-tree "$_root_dir" --print)
+_ungoogled_version=$("$_root_dir/devutils/print_tag_version.sh")
 
-_base_hash_name="helium_${_helium_version}"
+_base_hash_name="ungoogled_chromium_${_ungoogled_version}"
 _x64_hash_name="${_base_hash_name}_x86_64-macos.dmg.hashes.md"
 _arm64_hash_name="${_base_hash_name}_arm64-macos.dmg.hashes.md"
 
 _gh_run_href="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 
 touch ./github_release_note.md
-printf '## Helium macOS %s\n' "${_helium_version}" | tee -a ./github_release_note.md
+printf '## ungoogled-chromium macOS %s\n' "${_ungoogled_version}" | tee -a ./github_release_note.md
 
 if [ -f $_root_dir/announcements.md ]; then
     printf '### Announcements %s\n\n' | tee -a ./github_release_note.md

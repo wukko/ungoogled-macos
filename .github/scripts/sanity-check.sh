@@ -20,8 +20,7 @@ he setup | tee setup.log
 if [ "$1" = "sub" ]; then
     he sub
 
-    cd "$_src_dir"
-    cat components/omnibox_strings.grdp | grep -q Helium
+    test -f "$_subs_cache"
     exit 0
 fi
 
